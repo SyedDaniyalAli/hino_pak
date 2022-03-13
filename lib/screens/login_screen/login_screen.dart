@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hino_pak/screens/complain_screen/complain_screen.dart';
 
 import '../../widgets/app_bar.dart';
 import '../forget_pwd_screen/forget_pwd_screen.dart';
 import '../registration_screen/registration_screen.dart';
-
 
 class LoginPage extends StatefulWidget {
   static String routeName = './Login';
@@ -23,7 +23,8 @@ class _RegistrationState extends State<LoginPage> {
       setState(() {
         changeButton = true;
       });
-      Navigator.pushNamed(context, LoginPage.routeName);
+      await Future.delayed(const Duration(seconds: 2));
+      Navigator.pushNamed(context, ComplainScreen.routeName);
       setState(() {
         changeButton = false;
       });
@@ -111,9 +112,10 @@ class _RegistrationState extends State<LoginPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Container(
+                        AnimatedContainer(
+                          duration: Duration(seconds: 2),
                           height: 50,
-                          width: 120,
+                          width: changeButton ? 120 : 220,
                           decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(16)),
@@ -122,7 +124,9 @@ class _RegistrationState extends State<LoginPage> {
                                 'LOGIN',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {}),
+                              onPressed: () {
+                                moveToHome(context);
+                              }),
                         )
                       ],
                     ),

@@ -26,7 +26,7 @@ class _RegistrationState extends State<Registration> {
         duration: Duration(seconds: 4),
       ));
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+      Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (route) => false,);
       setState(() {
         changeButton = false;
       });
@@ -129,9 +129,10 @@ class _RegistrationState extends State<Registration> {
                         const SizedBox(
                           height: 25,
                         ),
-                        Container(
+                        AnimatedContainer(
+                          duration: Duration(seconds: 2),
                           height: 50,
-                          width: 120,
+                          width: changeButton ? 120 : 220,
                           decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(16)),

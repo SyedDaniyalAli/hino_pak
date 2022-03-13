@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'screens/add_complain_screen/add_complain_screen.dart';
 import 'screens/complain_screen/complain_screen.dart';
 import 'screens/forget_pwd_screen/forget_pwd_screen.dart';
 import 'screens/login_screen/login_screen.dart';
@@ -33,8 +34,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         Registration.routeName: (context) => Registration(),
-        Complaint.routeName: (ctx) => Complaint(),
+        AddComplain.routeName: (ctx) => AddComplain(),
         LoginPage.routeName: (ctx) => LoginPage(),
+        ComplainScreen.routeName: (ctx) => ComplainScreen(),
         ForgetPasswordScreen.routeName: (context) => ForgetPasswordScreen(),
       },
     );
