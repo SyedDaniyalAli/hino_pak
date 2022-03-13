@@ -24,7 +24,7 @@ class _RegistrationState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(const Duration(seconds: 2));
-      Navigator.pushNamed(context, ComplainScreen.routeName);
+      Navigator.pushNamedAndRemoveUntil(context, ComplainScreen.routeName, (route) => false,);
       setState(() {
         changeButton = false;
       });
