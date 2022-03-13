@@ -14,12 +14,12 @@ PreferredSizeWidget customAppBar({required String text}) {
           const SizedBox(
             height: 20,
           ),
-          // Text(
-          //   text,
-          //   style: const TextStyle(
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
+          Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
   );

@@ -15,6 +15,8 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  // 'https://hino.thesmarterp.com/api/method/frappe.core.doctype.user.user.reset_password
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         Registration.routeName: (context) => Registration(),
-        AddComplain.routeName: (ctx) => AddComplain(),
+        AddComplainScreen.routeName: (ctx) => AddComplainScreen(),
         LoginPage.routeName: (ctx) => LoginPage(),
         ComplainScreen.routeName: (ctx) => ComplainScreen(),
         ForgetPasswordScreen.routeName: (context) => ForgetPasswordScreen(),

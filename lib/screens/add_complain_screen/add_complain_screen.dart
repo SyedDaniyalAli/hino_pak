@@ -3,16 +3,16 @@ import 'package:hino_pak/screens/login_screen/login_screen.dart';
 
 import '../../widgets/app_bar.dart';
 
-class AddComplain extends StatefulWidget {
+class AddComplainScreen extends StatefulWidget {
   static String routeName = './addComplains';
 
-  const AddComplain({Key? key}) : super(key: key);
+  const AddComplainScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddComplain> createState() => _RegistrationState();
+  State<AddComplainScreen> createState() => _RegistrationState();
 }
 
-class _RegistrationState extends State<AddComplain> {
+class _RegistrationState extends State<AddComplainScreen> {
   String dropdownValue = 'Sindh';
   final _formKey = GlobalKey<FormState>();
   bool changeButton = false;
