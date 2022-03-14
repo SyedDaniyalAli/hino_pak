@@ -6,6 +6,7 @@ import 'screens/complain_screen/complain_screen.dart';
 import 'screens/forget_pwd_screen/forget_pwd_screen.dart';
 import 'screens/login_screen/login_screen.dart';
 import 'screens/registration_screen/registration_screen.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
             toolbarTextStyle: Theme.of(context).textTheme.bodyText2,
             titleTextStyle: Theme.of(context).textTheme.headline6,
           )),
+      //Initializing EasyLoading for better on screen notification
+      builder: EasyLoading.init(),
       routes: {
         '/': (context) => LoginPage(),
         Registration.routeName: (context) => Registration(),

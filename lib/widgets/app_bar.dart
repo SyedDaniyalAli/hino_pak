@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 PreferredSizeWidget customAppBar({required String text}) {
   return AppBar(
       elevation: 0,
-      toolbarHeight: 140,
+      toolbarHeight: 160,
       centerTitle: true,
       title: Column(
         children: [

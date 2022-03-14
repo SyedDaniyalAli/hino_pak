@@ -16,7 +16,7 @@ class _RegistrationState extends State<Registration> {
   final _formKey = GlobalKey<FormState>();
   bool changeButton = false;
 
-  moveTologin(BuildContext context) async {
+  moveToLogin(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         changeButton = true;
@@ -141,7 +141,7 @@ class _RegistrationState extends State<Registration> {
                               'SIGN UP',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () => moveTologin(context),
+                            onPressed: () => moveToLogin(context),
                           ),
                         )
                       ],

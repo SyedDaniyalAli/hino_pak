@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:convert' as convert;
+import 'package:dio/dio.dart' as d;
 
+
+import '../../services/http_service.dart';
 import '../../widgets/app_bar.dart';
-
 
 class ForgetPasswordScreen extends StatefulWidget {
   static String routeName = './ForgetPasswordScreen';
@@ -13,9 +16,54 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+
   final _formKey = GlobalKey<FormState>();
 
-  // 'https://hino.thesmarterp.com/api/method/frappe.core.doctype.user.user.reset_password
+  bool changeButton = false;
+  String email = '';
+
+  _resetPassword(BuildContext context) async {
+    // _loginNow(email: 'api@hinopak.com', password: 'API@212');
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      setState(() {
+        changeButton = true;
+      });
+      _forgetPassword(email: '$email');
+      await Future.delayed(const Duration(seconds: 4));
+      setState(() {
+        changeButton = false;
+      });
+    }
+  }
+
+  _forgetPassword({required String email}) async {
+    final queryParameters = {
+      'email': '$email',
+    };
+    try {
+      final result = "";
+      // await httpService.request(url: "api/method/frappe.core.doctype.user.user.reset_password", method: Method.POST, params: queryParameters);
+      if (result != null) {
+        if (result is d.Response) {
+          print('http: $result');
+            //Navigate to next screen~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Kindly check email'),
+              duration: Duration(seconds: 4),
+            ));
+          print(result);
+        }
+      }
+    }catch(e){
+      // print('Error: '+e.toString());
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Invalid email'),
+        duration: Duration(seconds: 4),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +88,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           hintText: "Please enter email",
                           labelText: "Email",
                         ),
+                        onSaved: (value) {
+                          email = value!;
+                        },
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email can not be empty";
@@ -52,18 +103,21 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      AnimatedContainer(
+                        duration: Duration(seconds: 4),
                         height: 50,
-                        width: 180,
+                        width: changeButton ? 180 : 220,
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(16)),
                         child: MaterialButton(
-                            child: const Text(
+                            child: Text(
                               'Reset password',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () {}),
+                            onPressed: () {
+                              _resetPassword(context);
+                            }),
                       )
                     ],
                   ),

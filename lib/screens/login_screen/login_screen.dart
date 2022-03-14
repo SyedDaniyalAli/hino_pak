@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hino_pak/screens/complain_screen/complain_screen.dart';
-import 'package:http/http.dart' as http;
+import 'package:hino_pak/services/http_service.dart';
 import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 import '../../widgets/app_bar.dart';
 import '../forget_pwd_screen/forget_pwd_screen.dart';
@@ -23,47 +27,15 @@ class _RegistrationState extends State<LoginPage> {
   String email = '';
   String password = '';
 
+
   _moveToHome(BuildContext context) async {
-    // _loginNow(email: 'api@hinopak.com', password: 'API@212');
+    loginNow(email: 'flutter@hp.com', password: 'flutter', context: context);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       setState(() {
         changeButton = true;
       });
-      _loginNow(email: '$email', password: '$password');
-      await Future.delayed(const Duration(seconds: 4));
-      setState(() {
-        changeButton = false;
-      });
-    }
-  }
-
-  _loginNow({required String email, required String password}) async {
-    print('Passing values=> usr=$email&pwd=$password');
-    var url = Uri.parse(
-        'https://hino.thesmarterp.com/api/method/login?usr=$email&pwd=$password');
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var msg = jsonResponse['message'];
-      print('http: $msg');
-      if (msg == 'Logged In') {
-        //Navigate to next screen~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          ComplainScreen.routeName,
-          (route) => false,
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid credentials'),
-        duration: Duration(seconds: 4),
-      ));
-      print('Request failed with status: ${response.statusCode}.');
+      // _loginNow(email: '$email', password: '$password');
     }
   }
 
