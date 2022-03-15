@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert' as convert;
-import 'package:dio/dio.dart' as d;
 
 
 import '../../services/http_service.dart';
@@ -29,41 +27,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       setState(() {
         changeButton = true;
       });
-      _forgetPassword(email: '$email');
-      await Future.delayed(const Duration(seconds: 4));
-      setState(() {
-        changeButton = false;
-      });
+      forgetPassword(email: '$email', context: context);
     }
   }
 
-  _forgetPassword({required String email}) async {
-    final queryParameters = {
-      'email': '$email',
-    };
-    try {
-      final result = "";
-      // await httpService.request(url: "api/method/frappe.core.doctype.user.user.reset_password", method: Method.POST, params: queryParameters);
-      if (result != null) {
-        if (result is d.Response) {
-          print('http: $result');
-            //Navigate to next screen~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Kindly check email'),
-              duration: Duration(seconds: 4),
-            ));
-          print(result);
-        }
-      }
-    }catch(e){
-      // print('Error: '+e.toString());
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid email'),
-        duration: Duration(seconds: 4),
-      ));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +69,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         },
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 28,
                       ),
                       AnimatedContainer(
                         duration: Duration(seconds: 4),

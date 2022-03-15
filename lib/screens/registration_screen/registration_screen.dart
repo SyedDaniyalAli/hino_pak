@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hino_pak/screens/login_screen/login_screen.dart';
 
+import '../../services/http_service.dart';
 import '../../widgets/app_bar.dart';
-
 
 class Registration extends StatefulWidget {
   static String routeName = './Registration';
 
   const Registration({Key? key}) : super(key: key);
+
   @override
   State<Registration> createState() => _RegistrationState();
 }
@@ -16,20 +18,36 @@ class _RegistrationState extends State<Registration> {
   final _formKey = GlobalKey<FormState>();
   bool changeButton = false;
 
+  String email = '';
+  String chassisNumber = '';
+  String fullName = '';
+  String phone = '';
+
   moveToLogin(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() {
         changeButton = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Registered Successfully'),
-        duration: Duration(seconds: 4),
-      ));
-      await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (route) => false,);
-      setState(() {
-        changeButton = false;
-      });
+      try {
+        showProgress();
+        addUser(
+          email: email,
+          context: context,
+          chassisNumber: chassisNumber,
+          fullName: fullName,
+          phone: phone,
+        ).then((value) => {
+              EasyLoading.dismiss(),
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                LoginPage.routeName,
+                (route) => false,
+              ),
+            });
+      } catch (e) {
+        EasyLoading.dismiss();
+      }
     }
   }
 
@@ -57,6 +75,9 @@ class _RegistrationState extends State<Registration> {
                             hintText: "Enter email",
                             labelText: "Email",
                           ),
+                          onSaved: (value) {
+                            email = value!;
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Email cannot be empty";
@@ -72,6 +93,9 @@ class _RegistrationState extends State<Registration> {
                             hintText: "Please enter Full Name",
                             labelText: "Full name",
                           ),
+                          onSaved: (value) {
+                            fullName = value!;
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Full name cannot be empty";
@@ -80,23 +104,7 @@ class _RegistrationState extends State<Registration> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        TextFormField(
-                          maxLength: 6,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: "Please enter Password",
-                            labelText: "Password",
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Password cannot be empty";
-                            } else if (value.length < 6) {
-                              return 'Password length shoulb be atleast 6';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
+
                         TextFormField(
                           decoration: const InputDecoration(
                             hintText: "Please enter phone number",
@@ -104,6 +112,9 @@ class _RegistrationState extends State<Registration> {
                           ),
                           maxLength: 11,
                           keyboardType: TextInputType.number,
+                          onSaved: (value) {
+                            phone = value!;
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Phone number cannot be empty";
@@ -119,6 +130,9 @@ class _RegistrationState extends State<Registration> {
                           ),
                           maxLength: 17,
                           keyboardType: TextInputType.number,
+                          onSaved: (value) {
+                            chassisNumber = value!;
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Chassis number cannot be empty";
@@ -153,6 +167,15 @@ class _RegistrationState extends State<Registration> {
           ),
         ),
       ),
+    );
+  }
+
+  void showProgress() {
+    EasyLoading.show(
+      status: 'Loading...',
+      indicator: CircularProgressIndicator(),
+      dismissOnTap: false,
+      maskType: EasyLoadingMaskType.black,
     );
   }
 }

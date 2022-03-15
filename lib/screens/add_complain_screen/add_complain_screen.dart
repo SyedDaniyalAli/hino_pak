@@ -1,15 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hino_pak/screens/login_screen/login_screen.dart';
-import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart' as d;
 
-import 'dart:convert' as convert;
+
 
 import '../../services/http_service.dart';
 import '../../widgets/app_bar.dart';
-import '../complain_screen/complain_screen.dart';
 
 class AddComplainScreen extends StatefulWidget {
   static String routeName = './addComplains';
@@ -22,7 +18,7 @@ class AddComplainScreen extends StatefulWidget {
 
 class _RegistrationState extends State<AddComplainScreen> {
   String _selected_region = '';
-  String _complain_type = '';
+  String _selected_complain_type = '';
   String _complain_desc = '';
 
   List<String> _complain_type_list = <String>[''];
@@ -33,51 +29,36 @@ class _RegistrationState extends State<AddComplainScreen> {
   bool changeButton = false;
 
   _trySubmit(BuildContext context) async {
+
+    if (_selected_region == '') {
+      EasyLoading.showToast("Select region");
+      return;
+    }
+    if (_selected_complain_type == '') {
+      EasyLoading.showToast("Select complain type");
+      return;
+    }
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
       setState(() {
         changeButton = true;
       });
-      _sendComplain(
-        region: _selected_region,
-        complainType: _complain_type,
-        complainDescription: _complain_desc,
-      );
-      await Future.delayed(const Duration(seconds: 4));
-      setState(() {
-        changeButton = false;
-      });
-    }
-  }
-
-  _sendComplain(
-      {required String region,
-      required String complainType,
-      required String complainDescription}) async {
-    print('Passing values=> $region , $complainType, $complainDescription');
-    var url = Uri.parse('https://hino.thesmarterp.com/api/method/login');
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var msg = jsonResponse['message'];
-      print('http: $msg');
-      if (msg == 'Logged In') {
-        //Navigate to next screen~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          ComplainScreen.routeName,
-          (route) => false,
+      try {
+        showProgress();
+        sendComplain(
+          region: _selected_region,
+          complainType: _selected_complain_type,
+          complainDescription: _complain_desc,
+          context: context,
+        ).then(
+          (value) => EasyLoading.dismiss(),
         );
+      } catch (e) {
+        print("Error: " + e.toString());
+        EasyLoading.dismiss();
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid credentials'),
-        duration: Duration(seconds: 4),
-      ));
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -88,19 +69,21 @@ class _RegistrationState extends State<AddComplainScreen> {
 
     showProgress();
 
-    getRegions(context).then((value) => value.forEach((element) {
-          setState(() {
-            _regions_list.add(element.toString());
-            EasyLoading.dismiss();
-          });
-        }));
+    getRegions(context)
+        .then((value) => value.forEach((element) {
+              setState(() {
+                _regions_list.add(element.toString());
+              });
+            }))
+        .then((value) => EasyLoading.dismiss());
 
-    getComplainType(context).then((value) => value.forEach((element) {
-      setState(() {
-        _complain_type_list.add(element.toString());
-        EasyLoading.dismiss();
-      });
-    }));
+    getComplainType(context)
+        .then((value) => value.forEach((element) {
+              setState(() {
+                _complain_type_list.add(element.toString());
+              });
+            }))
+        .then((value) => EasyLoading.dismiss());
   }
 
   @override
@@ -147,8 +130,7 @@ class _RegistrationState extends State<AddComplainScreen> {
                             });
                           },
                           items: _regions_list
-                              .map<DropdownMenuItem<String>>(
-                                  (String value) {
+                              .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -166,7 +148,7 @@ class _RegistrationState extends State<AddComplainScreen> {
                       Container(
                         width: double.infinity,
                         child: DropdownButton<String>(
-                          value: _complain_type,
+                          value: _selected_complain_type,
                           icon: const Icon(Icons.arrow_downward),
                           dropdownColor: Colors.white,
                           elevation: 2,
@@ -179,12 +161,11 @@ class _RegistrationState extends State<AddComplainScreen> {
                           ),
                           onChanged: (String? newValue) {
                             setState(() {
-                              _complain_type = newValue!;
+                              _selected_complain_type = newValue!;
                             });
                           },
                           items: _complain_type_list
-                              .map<DropdownMenuItem<String>>(
-                                  (String value) {
+                              .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -192,7 +173,9 @@ class _RegistrationState extends State<AddComplainScreen> {
                           }).toList(),
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
                         maxLength: 500,
                         maxLines: 6,

@@ -28,7 +28,7 @@ class StatusCard extends StatelessWidget {
                 height: 12,
                 width: 12,
                 decoration: BoxDecoration(
-                  color: complain_status == "Completed"
+                  color: complain_status == "Resolved"
                       ? Colors.green
                       : complain_status == "Pending"
                           ? Colors.yellow
