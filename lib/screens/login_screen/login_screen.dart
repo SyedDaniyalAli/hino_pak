@@ -75,6 +75,7 @@ class _RegistrationState extends State<LoginPage> {
                             hintText: "Please enter Password",
                             labelText: "Password",
                           ),
+                          obscureText: true,
                           onSaved: (value) {
                             password = value!;
                           },
