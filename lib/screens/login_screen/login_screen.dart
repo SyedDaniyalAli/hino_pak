@@ -1,11 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hino_pak/screens/complain_screen/complain_screen.dart';
 import 'package:hino_pak/services/http_service.dart';
-import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
 
 import '../../widgets/app_bar.dart';
 import '../forget_pwd_screen/forget_pwd_screen.dart';
@@ -27,15 +21,14 @@ class _RegistrationState extends State<LoginPage> {
   String email = '';
   String password = '';
 
-
   _moveToHome(BuildContext context) async {
-    loginNow(email: 'flutter@hp.com', password: 'flutter', context: context);
+    // loginNow(email: 'flutter@hp.com', password: 'flutter', context: context);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       setState(() {
         changeButton = true;
       });
-      // _loginNow(email: '$email', password: '$password');
+      loginNow(email: '$email', password: '$password', context: context);
     }
   }
 
