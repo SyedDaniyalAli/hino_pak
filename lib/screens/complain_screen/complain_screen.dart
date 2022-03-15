@@ -26,6 +26,7 @@ class _ComplainScreenState extends State<ComplainScreen> {
   }
 
   loadData() {
+    listOfComplaints.clear();
     getComplains(context)
         .then(
           (value) => value.forEach((element) {
@@ -35,6 +36,41 @@ class _ComplainScreenState extends State<ComplainScreen> {
           }),
         )
         .then((value) => EasyLoading.dismiss());
+  }
+
+  // Show Alert Dialog
+  void _showDialog(
+      {required String status,
+      required String complainType,
+      required String responseDetail,
+      required String resolutionDetail,
+      required BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Complaint Details"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Status: " + status + "\n",
+            ),
+            Text("Complaint Type: \n" + complainType + "\n"),
+            Text("First Responded On: \n" + responseDetail + "\n"),
+            Text("Resolution Detail: \n" + resolutionDetail + "\n"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Okay'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -62,9 +98,26 @@ class _ComplainScreenState extends State<ComplainScreen> {
               child: Column(
                 children: [
                   ...listOfComplaints.map(
-                    (e) => StatusCard(
-                      complaintType: e['complain_type'],
-                      complain_status: e['status'],
+                    (e) => GestureDetector(
+                      onTap: () => {
+                        _showDialog(
+                          context: context,
+                          status: e['status'].toString(),
+                          complainType: e['complain_type'].toString(),
+                          responseDetail:
+                              e['first_responded_on'].toString() == 'null'
+                                  ? 'No Record'
+                                  : e['first_responded_on'].toString(),
+                          resolutionDetail:
+                              e['resolutionDetails'].toString() == 'null'
+                                  ? 'No Record'
+                                  : e['resolutionDetails'].toString(),
+                        ),
+                      },
+                      child: StatusCard(
+                        complaintType: e['complain_type'],
+                        complain_status: e['status'],
+                      ),
                     ),
                   ),
                 ],

@@ -21,7 +21,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   String email = '';
 
   _resetPassword(BuildContext context) async {
-    // _loginNow(email: 'api@hinopak.com', password: 'API@212');
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       setState(() {

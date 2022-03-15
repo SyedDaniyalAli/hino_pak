@@ -25,16 +25,17 @@ loginNow(
         headers: {"Content-Type": "application/json"});
     updateCookie(res);
     if (res.statusCode == 200) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        ComplainScreen.routeName,
+        (route) => false,
+      );
       var jsonResponse = convert.jsonDecode(res.body) as Map<String, dynamic>;
       var msg = jsonResponse['message'];
       print('http msg: $msg');
       if (msg == 'Logged In') {
         //Navigate to next screen~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          ComplainScreen.routeName,
-          (route) => false,
-        );
+
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -121,7 +122,7 @@ Future<List> getComplains(BuildContext context) async {
 Future forgetPassword(
     {required String email, required BuildContext context}) async {
   final queryParameters = {
-    "email": "$email",
+    "user": "$email",
   };
 
   try {
@@ -139,12 +140,14 @@ Future forgetPassword(
         content: Text('Kindly check email'),
         duration: Duration(seconds: 4),
       ));
+      Navigator.of(context).pop();
       print(res);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid email'),
+        content: Text('Kindly check email'),
         duration: Duration(seconds: 4),
       ));
+      Navigator.of(context).pop();
       print('http msg: ${res.body}');
     }
   } catch (e) {
@@ -153,6 +156,7 @@ Future forgetPassword(
       content: Text('No Internet Connection'),
       duration: Duration(seconds: 4),
     ));
+    Navigator.of(context).pop();
   }
 }
 
@@ -216,7 +220,7 @@ Future sendComplain(
   try {
     var res = await http.post(
         Uri.parse(
-            "https://hino.thesmarterp.com/api/resource/Complaint"),
+            "https://hino.thesmarterp.com/api/method/complaint_management.utils.complain.post_complain"),
         body: json.encode(queryParameters),
         headers: {"Content-Type": "application/json"});
 
